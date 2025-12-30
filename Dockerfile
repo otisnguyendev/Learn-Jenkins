@@ -1,12 +1,11 @@
-# Bước 1: Dùng Image JDK nhẹ để chạy Java
-FROM openjdk:17-jdk-slim
+# Sử dụng Image JDK 25 chính thức từ Oracle hoặc các đơn vị uy tín
+FROM container-registry.oracle.com/java/openjdk:25-oraclelinux9
 
-# Bước 2: Tạo thư mục app trong container
+# Tạo thư mục làm việc
 WORKDIR /app
 
-# Bước 3: Copy toàn bộ thư mục src (đã compile) vào container
+# Copy thư mục src (chứa các file .class đã biên dịch) vào container
 COPY src/ /app/src
 
-# Bước 4: Chạy chương trình khi container khởi động
-# Chúng ta sẽ chạy file Main đã được biên dịch sẵn
+# Chạy ứng dụng
 CMD ["java", "-cp", "src", "Main"]

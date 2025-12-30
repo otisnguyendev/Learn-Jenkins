@@ -4,22 +4,28 @@ pipeline {
     stages {
         stage('Biên dịch Java') {
             steps {
+                sh 'java -version'
                 sh 'javac src/Main.java'
+            }
+        }
+
+        stage('Check Docker') {
+            steps {
+                // Kiểm tra xem Jenkins đã thấy Docker chưa
+                sh 'docker version'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                // Lệnh build image đặt tên là 'learn-jenkins'
-                // Dấu chấm '.' ở cuối có nghĩa là tìm Dockerfile ở thư mục hiện tại
+                // Build với tên image là learn-jenkins
                 sh 'docker build -t learn-jenkins .'
             }
         }
 
-        stage('Chạy thử Container') {
+        stage('Run Container') {
             steps {
-                // Chạy thử image vừa build để xem kết quả
-                // --rm: tự xóa container sau khi chạy xong để đỡ rác máy
+                // Chạy thử container để xem kết quả "Hello Jenkins"
                 sh 'docker run --rm learn-jenkins'
             }
         }
