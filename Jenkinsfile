@@ -2,18 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Compile (Biên dịch)') {
+        stage('Biên dịch Java') {
             steps {
-                echo "Đang ở thư mục: ${pwd()}"
-                // Cách 1: Chỉ định đường dẫn đầy đủ đến file java
                 sh 'javac src/Main.java'
             }
         }
 
-        stage('Run (Chạy thử)') {
+        stage('Build Docker Image') {
             steps {
-                // Cách 2: Dùng lệnh -cp để báo cho Java biết code nằm trong 'src'
-                sh 'java -cp src Main'
+                // Lệnh build image đặt tên là 'learn-jenkins'
+                // Dấu chấm '.' ở cuối có nghĩa là tìm Dockerfile ở thư mục hiện tại
+                sh 'docker build -t learn-jenkins .'
+            }
+        }
+
+        stage('Chạy thử Container') {
+            steps {
+                // Chạy thử image vừa build để xem kết quả
+                // --rm: tự xóa container sau khi chạy xong để đỡ rác máy
+                sh 'docker run --rm learn-jenkins'
             }
         }
     }
